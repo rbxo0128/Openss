@@ -1,5 +1,5 @@
 
-**대학교 과제**
+**Open Sources Software Assignment**
 
 https://github.com/rbxo0128/Openss
 
