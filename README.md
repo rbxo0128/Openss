@@ -39,5 +39,7 @@ https://github.com/rbxo0128/Openss
 
 
 **Resource image sound : Raiden project, Strikers 1945, Free Copyright**
-**Reference code : Simple plane shooter game, Suan Lab (파이썬으로 슈팅 게임 만들기) **
+
+
+**Reference code : Simple plane shooter game, Suan Lab (파이썬으로 슈팅 게임 만들기)**
 
