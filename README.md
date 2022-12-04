@@ -1,7 +1,10 @@
-#Openss
-*Hi I'm Kwon Kyutae*
-**Nice to meet u**
 
-:smiley::smiley:
+**University Assignment**
 
 https://github.com/rbxo0128/Openss
+
+![hi](./resources/image/background.png)
+
+
+Resource image sound : Raiden project, Strikers 1945, Free Copyright
+
