@@ -34,5 +34,5 @@ https://github.com/rbxo0128/Openss
 
 
 
-Resource image sound : Raiden project, Strikers 1945, Free Copyright
+**Resource image sound : Raiden project, Strikers 1945, Free Copyright**
 
