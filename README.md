@@ -4,7 +4,7 @@
 https://github.com/rbxo0128/Openss
 
 
-##게임사진
+## 게임사진
 
 
 ![player](./resources/image/plane1.png)
