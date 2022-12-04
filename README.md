@@ -3,6 +3,8 @@
 
 https://github.com/rbxo0128/Openss
 
+main.py 로 실행
+
 
 ## 게임사진
 
