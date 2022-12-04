@@ -3,7 +3,12 @@
 
 https://github.com/rbxo0128/Openss
 
-방향키 또는 WASD 로 플레이어를 조종할 수 있다.
+
+![player](./resources/image/plane1.png)
+
+
+플레이어 : 방향키 또는 WASD 로 플레이어를 조종할 수 있다.
+
 
 ![playing](./resources/image/main.png)
 
