@@ -68,19 +68,15 @@ def main():
     player_down_img = pygame.image.load('resources/image/explosion.png')
     player_down_imgs = []
     player_down_imgs.append(player_down_img.subsurface(pygame.Rect(0,0,50,50)))
-    players = pygame.sprite.Group()
 
     life_img = []
     life_img.append(pygame.image.load("resources/image/life1.png"))
     life_img.append(pygame.image.load("resources/image/life1.png").subsurface(pygame.Rect(0,0,70,38)))
     life_img.append(pygame.image.load("resources/image/life1.png").subsurface(pygame.Rect(0,0,35,38)))
-    life_rect = pygame.Rect(0,0,105,38)
 
     power_item_img = pygame.image.load('resources/image/power_item.png')
     life_item_img = pygame.image.load('resources/image/life_item.png')
     speed_item_img = pygame.image.load('resources/image/speed_item.png')
-
-    player_down_index = 16
     
     shoot_frequency = 0
     shoot_range = 15
@@ -96,21 +92,23 @@ def main():
     dmg=0
 
     stack=0
+
     while run:
+        
         clock.tick(60)
 
         games.fill(0)
         games.blit(background, (0, 0))
         
-        
-
-        if not player.is_hit:
+        if not player.dead:
             games.blit(player.image[player.img_index], player.rect)
             player.img_index=0    
+            ####### 총알 쏘기 및 속도 #######
             if shoot_frequency % shoot_range == 0:
                 misile_sound.play()
                 player.shoot(misile_img[dmg])
             shoot_frequency += 1
+
             if shoot_frequency >= shoot_range:
                 shoot_frequency=0
         
@@ -119,6 +117,7 @@ def main():
                 if misile.rect.bottom < 0:
                     player.misiles.remove(misile)
 
+            ####### 적 출현 #######
             if enemy2_frequemcy % 1000 == 0:
                 enemy2_pos = [random.randint(0, GAME_WIDTH - enemy2_rect.width),0]
                 enemy2 = Enemy(enemy2_img,enemy2_down_imgs, enemy2_pos)
@@ -151,7 +150,7 @@ def main():
                     lifes += 1
                     if lifes > 2:
                         pygame.mixer.music.pause()
-                        player.is_hit = True
+                        player.dead = True
                         lifes=0
                         break
             
@@ -172,7 +171,7 @@ def main():
                     lifes += 1
                     if lifes > 2:
                         pygame.mixer.music.pause()
-                        player.is_hit = True
+                        player.dead = True
                         lifes=0
                         break
                     
@@ -223,6 +222,7 @@ def main():
                     if rand == 4:
                         enemy2.give_speed_item(speed_item_img)
 
+            ####### 아이템 #######
             for itema in enemy2.power_items:
                 itema.move()
                 if pygame.sprite.collide_circle(itema, player):
@@ -293,11 +293,11 @@ def main():
                 exit()
         
         
-
+        ####### 플레이어 이동 #######
         
         key_pressed = pygame.key.get_pressed()
         
-        if not player.is_hit:
+        if not player.dead:
             if key_pressed[K_w] or key_pressed[K_UP]:
                 player.moveUp()
             if key_pressed[K_s] or key_pressed[K_DOWN]:
@@ -308,8 +308,8 @@ def main():
             if key_pressed[K_d] or key_pressed[K_RIGHT]:
                 player.moveRight()
                 player.img_index=2
-
-        if player.is_hit:
+        ####### 플레이어 사망 시 #######
+        if player.dead:
             while 1:
                 games.blit(gameover,(0,0))
                 for event in pygame.event.get():
