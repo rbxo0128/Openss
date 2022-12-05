@@ -32,7 +32,7 @@ main.py 로 실행
 
 게임 오버 R키를 누르면 재시작
 
-![pitem](./resources/image/power_item.png) - 파워 아이템 : 플레이어의 공격력을 1 올려준다 (적 체력 미구현)
+![pitem](./resources/image/power_item.png) - 파워 아이템 : 플레이어의 공격력을 1 올려준다
 
 
 ![litem](./resources/image/life_item.png) - 목숨 아이템 : 플레이어의 목숨을 1개 늘려준다
@@ -57,4 +57,9 @@ MIT
 
 
 **Reference code : Simple plane shooter game, Suan Lab (파이썬으로 슈팅 게임 만들기)**
+
+## UPDATE
+
+
+향후 시간이 되면 스킬 또는 보스 추가하고 싶음
 
