@@ -3,6 +3,7 @@ import pygame
 GAME_WIDTH = 480
 GAME_HEIGHT = 800
 
+####### 플레이어 #######
 class Player(pygame.sprite.Sprite):
     def __init__(self, plane_img, player_rect, init_pos):
         pygame.sprite.Sprite.__init__(self)
@@ -14,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 8                                  
         self.misiles = pygame.sprite.Group()            
         self.img_index = 0                              
-        self.is_hit = False
+        self.dead = False
 
     def get_pos(self):
         x = self.rect.x
@@ -53,6 +54,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.rect.left += self.speed
 
+####### 총알 #######
 class Misile(pygame.sprite.Sprite):
     def __init__(self, misile_img, init_pos):
         pygame.sprite.Sprite.__init__(self)
@@ -64,6 +66,7 @@ class Misile(pygame.sprite.Sprite):
     def move(self):
         self.rect.top -= self.speed
 
+####### 적 #######
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enemy_img, enemy_down_imgs, init_pos):
         pygame.sprite.Sprite.__init__(self)
@@ -92,7 +95,7 @@ class Enemy(pygame.sprite.Sprite):
         item_speed = Speed_Item(item_img,self.rect.midbottom)
         self.speed_items.add(item_speed)
 
-
+####### 아이템 #######
 class Power_Item(pygame.sprite.Sprite):
     def __init__(self, item_img, init_pos):
         pygame.sprite.Sprite.__init__(self)
