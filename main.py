@@ -95,6 +95,7 @@ def main():
     lifes=0
     dmg=0
 
+    stack=0
     while run:
         clock.tick(60)
 
@@ -193,19 +194,34 @@ def main():
 
                 games.blit(enemy_down.down_imgs[0],enemy_down.rect)
                 enemy_down.down_index += 1
-
-            enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, 1, 1)
+            
+            enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, False, False)
+            if enemies3_down != {}:
+                if dmg == 0:
+                    stack += 1
+                    if stack >= 2:
+                        enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, True, True)
+                    else:
+                        enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, False, True)
+                else:
+                    stack += 2
+                    if stack >= 2:
+                        enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, True, True)
+                    else:
+                        enemies3_down = pygame.sprite.groupcollide(enemies2, player.misiles, False, True)
 
             for enemy_down in enemies3_down:
                 enemy_sound.play()
-                enemies2_down.add(enemy_down)
-                rand = random.randint(1,6)
-                if rand == 6:
-                    enemy2.give_power_item(power_item_img)
-                if rand == 5:
-                    enemy2.give_life_item(life_item_img)
-                if rand == 4:
-                    enemy2.give_speed_item(speed_item_img)
+                if stack >= 2:                   
+                    stack = 0
+                    enemies2_down.add(enemy_down)
+                    rand = random.randint(1,6)
+                    if rand == 6:
+                        enemy2.give_power_item(power_item_img)
+                    if rand == 5:
+                        enemy2.give_life_item(life_item_img)
+                    if rand == 4:
+                        enemy2.give_speed_item(speed_item_img)
 
             for itema in enemy2.power_items:
                 itema.move()
