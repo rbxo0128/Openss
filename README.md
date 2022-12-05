@@ -7,7 +7,7 @@ main.py 로 실행
 
 
 VSCODE 사용 시 폴더 열기로 게임 폴더를 열어 실행하거나 
-C://Users//사용자//resources 를 복사 붙여넣기로 실행
+C://Users//사용자이름//resources 를 복사 붙여넣기로 실행
 
 
 ## 게임사진
