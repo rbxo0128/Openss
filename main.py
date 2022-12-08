@@ -14,7 +14,7 @@ def main():
     pygame.mixer.music.load("resources/sound/background.mp3")
     pygame.mixer.music.play(-1,0.0)
     pygame.mixer.music.set_volume(0.25)
-
+    
     misile_sound = pygame.mixer.Sound(os.getcwd()+"\\resources\\sound\\bullet.wav")
     misile_sound.set_volume(0.15)
     
@@ -29,6 +29,7 @@ def main():
 
     background = pygame.image.load('resources/image/background.png').convert()
     gameover = pygame.image.load('resources/image/gameover.png')
+    cleared = pygame.image.load('resources/image/stageclear.png')
 
     plane_img = pygame.image.load('resources/image/plane.png')
 
@@ -59,6 +60,29 @@ def main():
     enemy2_down_imgs = []
     enemy2_down_imgs.append(enemy2_down_img.subsurface(pygame.Rect(0,0,96,96)))
 
+    boss_img = pygame.image.load('resources/image/boss1.png')
+    boss = Boss(boss_img,(0,-150))
+    boss_group = pygame.sprite.Group()
+    boss_hp = []
+    boss_hp_img = pygame.image.load('resources/image/1.png')
+    boss_explosion = pygame.image.load('resources/image/explosion3.png')
+    boss_bullet = pygame.image.load('resources/image/boss_bullet.png')
+    boss_bullet_rect = pygame.Rect(0,0,14,14)
+
+    boss_bullets = pygame.sprite.Group()
+
+    clear = False
+    a = 440
+    c=0
+    d=10000
+    while 1:
+        if d < 0:
+            break
+        boss_hp.append(boss_hp_img.subsurface(pygame.Rect(0,0,a-22*c,22)))
+        d=a-22*c
+        c+=1
+
+
     enemies = pygame.sprite.Group()
     enemies2 = pygame.sprite.Group()
 
@@ -82,6 +106,7 @@ def main():
     shoot_range = 15
     enemy_frequemcy = 0
     enemy2_frequemcy = 0
+    boss_frequency = 0
 
     score = 0
 
@@ -92,6 +117,8 @@ def main():
     dmg=0
 
     stack=0
+    boss_health = 200
+    boss_appear = 30000
 
     while run:
         
@@ -122,8 +149,8 @@ def main():
                 enemy2_pos = [random.randint(0, GAME_WIDTH - enemy2_rect.width),0]
                 enemy2 = Enemy(enemy2_img,enemy2_down_imgs, enemy2_pos)
                 enemies2.add(enemy2)
-
-            enemy2_frequemcy += 1
+            if score < boss_appear:
+                enemy2_frequemcy += 1
 
             if enemy2_frequemcy >= 1000:
                 enemy2_frequemcy = 0
@@ -132,8 +159,8 @@ def main():
                 enemy_pos = [random.randint(0, GAME_WIDTH - enemy_rect.width), 0]
                 enemy = Enemy(enemy_img,enemy_down_imgs, enemy_pos)
                 enemies.add(enemy)
-
-            enemy_frequemcy += 1
+            if score < boss_appear:
+                enemy_frequemcy += 1
             if enemy_frequemcy >=100:
                 enemy_frequemcy = 0
 
@@ -148,6 +175,12 @@ def main():
 
                     player.set_pos(200,600)
                     lifes += 1
+                    dmg -= 1
+                    shoot_range -= 1
+                    if dmg < 0:
+                        dmg = 0
+                    if shoot_range > 15:
+                        shoot_range = 15
                     if lifes > 2:
                         pygame.mixer.music.pause()
                         player.dead = True
@@ -169,6 +202,12 @@ def main():
 
                     player.set_pos(200,600)
                     lifes += 1
+                    dmg -= 1
+                    shoot_range -= 1
+                    if dmg < 0:
+                        dmg = 0
+                    if shoot_range > 15:
+                        shoot_range = 15
                     if lifes > 2:
                         pygame.mixer.music.pause()
                         player.dead = True
@@ -221,6 +260,164 @@ def main():
                         enemy2.give_life_item(life_item_img)
                     if rand == 4:
                         enemy2.give_speed_item(speed_item_img)
+            ####### 보스 #######
+            
+            boss_group.add(boss)
+            if boss_health <= 0:
+                boss_a = 20
+            elif boss_health <= 10:
+                boss_a = 19
+            elif boss_health <= 20:
+                boss_a = 18
+            elif boss_health <= 30:
+                boss_a = 17
+            elif boss_health <= 40:
+                boss_a = 16
+            elif boss_health <= 50:
+                boss_a = 15
+            elif boss_health <= 60:
+                boss_a = 14
+            elif boss_health <= 70:
+                boss_a = 13
+            elif boss_health <= 80:
+                boss_a = 12
+            elif boss_health <= 90:
+                boss_a = 11
+            elif boss_health <= 100:
+                boss_a = 10
+            elif boss_health <= 110:
+                boss_a = 9
+            elif boss_health <= 120:
+                boss_a = 8
+            elif boss_health <= 130:
+                boss_a = 7
+            elif boss_health <= 140:
+                boss_a = 6
+            elif boss_health <= 150:
+                boss_a = 5
+            elif boss_health <= 160:
+                boss_a = 4
+            elif boss_health <= 170:
+                boss_a = 3
+            elif boss_health <= 180:
+                boss_a = 2
+            elif boss_health <= 190:
+                boss_a = 1
+            elif boss_health <= 200:
+                boss_a = 0
+            if score > boss_appear:
+                if boss_health > 0:
+                    games.blit(boss.image,boss.rect)
+                
+                games.blit(boss_hp[boss_a], (20,50))
+                if boss.rect.top < 0:
+                    boss.move()
+                else:
+                    boss_bullet_pos = [random.randint(0, GAME_WIDTH - boss_bullet_rect.width),220]
+                    boss_s = Enemy(boss_bullet,enemy2_down_imgs, boss_bullet_pos)
+                    boss_frequency += 1
+                    if boss_frequency%20 == 0:
+                        boss_bullets.add(boss_s)
+                        boss_bullets.add(boss_s)
+                        boss_bullets.add(boss_s)
+                        boss_bullets.add(boss_s)
+                        boss_bullets.add(boss_s)
+                        boss_frequency=0
+                
+                boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, False)
+                for bosses in boss_group:
+                    if pygame.sprite.collide_rect(bosses, player):
+                        player_sound.play()
+                        games.blit(player_down_imgs[0], (player.get_pos())) 
+                        pygame.time.delay(30)
+                        player.set_pos(200,600)
+                        lifes += 1
+                        dmg -= 1
+                        shoot_range -= 1
+                        if dmg < 0:
+                            dmg = 0
+                        if shoot_range > 15:
+                            shoot_range = 15                        
+                        if lifes > 2:
+                            pygame.mixer.music.pause()
+                            player.dead = True
+                            lifes=0
+                            break   
+                
+
+                for bosses in boss_bullets:
+                    bosses.move()
+                    if pygame.sprite.collide_circle(bosses, player):
+                        player_sound.play()
+                        boss_bullets.remove(bosses)
+                        games.blit(player_down_imgs[0], (player.get_pos())) 
+                        pygame.time.delay(30)
+
+                        player.set_pos(200,600)
+                        lifes += 1
+                        dmg -= 1
+                        shoot_range -= 1
+                        if dmg < 0:
+                            dmg = 0
+                        if shoot_range > 15:
+                            shoot_range = 15                        
+                        if lifes > 2:
+                            pygame.mixer.music.pause()
+                            player.dead = True
+                            lifes=0
+                            break
+            
+
+                    if bosses.rect.top > GAME_HEIGHT:
+                        boss_bullets.remove(bosses)
+
+
+                if boss_down != {}:
+                    if dmg == 0:
+                        boss_health -= 1
+                        if boss_health < 0:
+                            enemy_sound.play()
+                            games.blit(boss_explosion,(96,0))
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, True, True)
+                            clear = True
+                            player.dead = True
+                        else:
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, True)
+                            
+                    elif dmg == 1:
+                        boss_health -= 2
+                        if boss_health < 0:
+                            enemy_sound.play()
+                            games.blit(boss_explosion,(96,0))
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, True, True)
+                            clear = True
+                            player.dead = True
+                        else:
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, True)
+
+                    elif dmg == 2:
+                        boss_health -= 3
+                        if boss_health < 0:
+                            enemy_sound.play()
+                            games.blit(boss_explosion,(96,0))
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, True, True)
+                            clear = True
+                            player.dead = True
+                        else:
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, True)
+
+                    elif dmg == 3:
+                        boss_health -= 4
+                        if boss_health < 0:
+                            enemy_sound.play()
+                            games.blit(boss_explosion,(96,0))
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, True, True)
+                            clear = True
+                            player.dead = True
+                        else:
+                            boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, True)
+
+
 
             ####### 아이템 #######
             for itema in enemy2.power_items:
@@ -274,6 +471,7 @@ def main():
             enemy2.power_items.draw(games)
             enemy2.speed_items.draw(games)
             enemy2.life_items.draw(games)
+            boss_bullets.draw(games)
             
             games.blit(life_img[lifes], (375,0))
             
@@ -311,7 +509,10 @@ def main():
         ####### 플레이어 사망 시 #######
         if player.dead:
             while 1:
-                games.blit(gameover,(0,0))
+                if clear == False:
+                    games.blit(gameover,(0,0))
+                else:
+                    games.blit(cleared,(0,0))
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
