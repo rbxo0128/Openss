@@ -59,7 +59,7 @@ MIT
 **Resource image sound : Raiden project(https://github.com/Margeli/Raiden1990/tree/master/Raiden%20Game/Game/Assets/Images), Strikers 1945, Free Copyright**
 
 
-**Reference code : Simple plane shooter game, Suan Lab (파이썬으로 슈팅 게임 만들기)**
+**Reference code : Simple plane shooter game(https://www.sourcecodester.com/python/14646/simple-plane-shooter-game-using-pygame-source-code.html), Suan Lab (파이썬으로 슈팅 게임 만들기)**
 
 ## UPDATE
 
