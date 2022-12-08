@@ -118,7 +118,7 @@ def main():
 
     stack=0
     boss_health = 200
-    boss_appear = 1000
+    boss_appear = 30000
     invincible = 0
 
 
