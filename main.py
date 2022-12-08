@@ -118,7 +118,9 @@ def main():
 
     stack=0
     boss_health = 200
-    boss_appear = 30000
+    boss_appear = 1000
+    invincible = 0
+
 
     while run:
         
@@ -126,10 +128,18 @@ def main():
 
         games.fill(0)
         games.blit(background, (0, 0))
-        
+        if player.invin == True:
+            invincible += 1
+            print(invincible)
+            if invincible > 60:
+                player.invin = False
+                invincible = 0
+
         if not player.dead:
             games.blit(player.image[player.img_index], player.rect)
-            player.img_index=0    
+            player.img_index=0
+
+                
             ####### 총알 쏘기 및 속도 #######
             if shoot_frequency % shoot_range == 0:
                 misile_sound.play()
@@ -166,26 +176,29 @@ def main():
 
             for enemy in enemies:
                 enemy.move()
-                if pygame.sprite.collide_circle(enemy, player):
-                    player_sound.play()
-                    enemies_down.add(enemy)
-                    enemies.remove(enemy)
-                    games.blit(player_down_imgs[0], (player.get_pos())) 
-                    pygame.time.delay(30)
+                if player.invin == False:
+                    if pygame.sprite.collide_circle(enemy, player):
+                        player_sound.play()
+                        enemies_down.add(enemy)
+                        enemies.remove(enemy)
+                        games.blit(player_down_imgs[0], (player.get_pos())) 
+                        pygame.time.delay(30)
 
-                    player.set_pos(200,600)
-                    lifes += 1
-                    dmg -= 1
-                    shoot_range -= 1
-                    if dmg < 0:
-                        dmg = 0
-                    if shoot_range > 15:
-                        shoot_range = 15
-                    if lifes > 2:
-                        pygame.mixer.music.pause()
-                        player.dead = True
-                        lifes=0
-                        break
+                        player.set_pos(200,600)
+                        player.invin = True
+                        lifes += 1
+                        dmg -= 1
+                        shoot_range -= 1
+                        if dmg < 0:
+                            dmg = 0
+                        if shoot_range > 15:
+                            shoot_range = 15
+                        if lifes > 2:
+                            pygame.mixer.music.pause()
+                            player.dead = True
+                            lifes=0
+                            break
+
             
 
                 if enemy.rect.top > GAME_HEIGHT:
@@ -193,26 +206,28 @@ def main():
             
             for enemy in enemies2:
                 enemy.move()
-                if pygame.sprite.collide_circle(enemy, player):
-                    player_sound.play()
-                    enemies2_down.add(enemy)
-                    enemies2.remove(enemy)
-                    games.blit(player_down_imgs[0], (player.get_pos())) 
-                    pygame.time.delay(30)
+                if player.invin == False:
+                    if pygame.sprite.collide_circle(enemy, player):
+                        player.invin = True
+                        player_sound.play()
+                        enemies2_down.add(enemy)
+                        enemies2.remove(enemy)
+                        games.blit(player_down_imgs[0], (player.get_pos())) 
+                        pygame.time.delay(30)
 
-                    player.set_pos(200,600)
-                    lifes += 1
-                    dmg -= 1
-                    shoot_range -= 1
-                    if dmg < 0:
-                        dmg = 0
-                    if shoot_range > 15:
-                        shoot_range = 15
-                    if lifes > 2:
-                        pygame.mixer.music.pause()
-                        player.dead = True
-                        lifes=0
-                        break
+                        player.set_pos(200,600)
+                        lifes += 1
+                        dmg -= 1
+                        shoot_range -= 1
+                        if dmg < 0:
+                            dmg = 0
+                        if shoot_range > 15:
+                            shoot_range = 15
+                        if lifes > 2:
+                            pygame.mixer.music.pause()
+                            player.dead = True
+                            lifes=0
+                            break
                     
 
                 if enemy.rect.top > GAME_HEIGHT:
@@ -326,46 +341,52 @@ def main():
                 
                 boss_down = pygame.sprite.groupcollide(boss_group, player.misiles, False, False)
                 for bosses in boss_group:
-                    if pygame.sprite.collide_rect(bosses, player):
-                        player_sound.play()
-                        games.blit(player_down_imgs[0], (player.get_pos())) 
-                        pygame.time.delay(30)
-                        player.set_pos(200,600)
-                        lifes += 1
-                        dmg -= 1
-                        shoot_range -= 1
-                        if dmg < 0:
-                            dmg = 0
-                        if shoot_range > 15:
-                            shoot_range = 15                        
-                        if lifes > 2:
-                            pygame.mixer.music.pause()
-                            player.dead = True
-                            lifes=0
-                            break   
+                    if player.invin == False:
+                        if pygame.sprite.collide_rect(bosses, player):
+                            player.invin = True
+                            player_sound.play()
+                            games.blit(player_down_imgs[0], (player.get_pos())) 
+                            pygame.time.delay(30)
+                            player.set_pos(200,600)
+                            lifes += 1
+                            dmg -= 1
+                            shoot_range -= 1
+                            if dmg < 0:
+                                dmg = 0
+                            if shoot_range > 15:
+                                shoot_range = 15                        
+                            if lifes > 2:
+                                pygame.mixer.music.pause()
+                                player.dead = True
+                                lifes=0
+                                break
+
                 
 
                 for bosses in boss_bullets:
                     bosses.move()
-                    if pygame.sprite.collide_circle(bosses, player):
-                        player_sound.play()
-                        boss_bullets.remove(bosses)
-                        games.blit(player_down_imgs[0], (player.get_pos())) 
-                        pygame.time.delay(30)
+                    if player.invin == False:
+                        if pygame.sprite.collide_circle(bosses, player):
+                            player.invin = True
+                            player_sound.play()
+                            boss_bullets.remove(bosses)
+                            games.blit(player_down_imgs[0], (player.get_pos())) 
+                            pygame.time.delay(30)
 
-                        player.set_pos(200,600)
-                        lifes += 1
-                        dmg -= 1
-                        shoot_range -= 1
-                        if dmg < 0:
-                            dmg = 0
-                        if shoot_range > 15:
-                            shoot_range = 15                        
-                        if lifes > 2:
-                            pygame.mixer.music.pause()
-                            player.dead = True
-                            lifes=0
-                            break
+                            player.set_pos(200,600)
+                            lifes += 1
+                            dmg -= 1
+                            shoot_range -= 1
+                            if dmg < 0:
+                                dmg = 0
+                            if shoot_range > 15:
+                                shoot_range = 15                        
+                            if lifes > 2:
+                                pygame.mixer.music.pause()
+                                player.dead = True
+                                lifes=0
+                                break
+ 
             
 
                     if bosses.rect.top > GAME_HEIGHT:

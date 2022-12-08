@@ -16,7 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.misiles = pygame.sprite.Group()            
         self.img_index = 0                              
         self.dead = False
-
+        self.invin = False
+        
     def get_pos(self):
         x = self.rect.x
         y = self.rect.y
@@ -79,6 +80,7 @@ class Enemy(pygame.sprite.Sprite):
         self.power_items = pygame.sprite.Group()
         self.life_items = pygame.sprite.Group()
         self.speed_items = pygame.sprite.Group()
+        
 
     def move(self):
         self.rect.top += self.speed
@@ -94,6 +96,19 @@ class Enemy(pygame.sprite.Sprite):
     def give_speed_item(self, item_img):
         item_speed = Speed_Item(item_img,self.rect.midbottom)
         self.speed_items.add(item_speed)
+
+####### 보스 #######
+class Boss(pygame.sprite.Sprite):
+    def __init__(self, boss_img, init_pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = boss_img
+        self.rect = self.image.get_rect()
+        self.rect.topleft = init_pos
+        self.speed = 1
+        self.down_index = 0
+        
+    def move(self):
+        self.rect.top += self.speed
 
 ####### 아이템 #######
 class Power_Item(pygame.sprite.Sprite):
