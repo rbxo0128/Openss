@@ -319,7 +319,7 @@ def main():
                 boss_a = 1
             elif boss_health <= 200:
                 boss_a = 0
-            if score > boss_appear:
+            if score >= boss_appear:
                 if boss_health > 0:
                     games.blit(boss.image,boss.rect)
                 
