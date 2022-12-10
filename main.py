@@ -130,7 +130,6 @@ def main():
         games.blit(background, (0, 0))
         if player.invin == True:
             invincible += 1
-            print(invincible)
             if invincible > 60:
                 player.invin = False
                 invincible = 0
